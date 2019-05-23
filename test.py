@@ -19,21 +19,39 @@ def getEncodedKey(client_key, client_secret):
     return b64_encoded_key.decode('ascii')
 
 
-
-credentials = getCredentials()
-b64_encoded_key = getEncodedKey(credentials['client_key'], credentials['client_secret_key'])
+#
+#credentials = getCredentials()
+#b64_encoded_key = getEncodedKey(credentials['client_key'], credentials['client_secret_key'])
 
 base_url = 'https://api.twitter.com/'
-auth_url = '{}oauth2/token'.format(base_url)
+# https://api.twitter.com/oauth/request_token
+auth_url = '{}oauth/request_token'.format(base_url)
 auth_headers = {
-    'Authorization': 'Basic {}'.format(b64_encoded_key),
-    'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+    'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+    'oauth_callback': 'oob'
 }
-auth_data = {
-    'grant_type': 'client_credentials'
-}
-auth_resp = requests.post(auth_url, headers=auth_headers, data=auth_data)
+
+try:
+    auth_resp = requests.post(auth_url, headers=auth_headers)
+    auth_resp.raise_for_status()
+except requests.exceptions.HTTPError as e:  # This is the correct syntax
+    print e
+    sys.exit(1)
+
 print(auth_resp.status_code)
-access_token = auth_resp.json()['access_token']
+print(auth_resp)
+access_token = auth_resp.json()['oauth_token']
 print(access_token)
 
+#auth_url = '{}oauth2/token'.format(base_url)
+#auth_headers = {
+#    'Authorization': 'Basic {}'.format(b64_encoded_key),
+#    'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+#}
+#auth_data = {
+#    'grant_type': 'client_credentials'
+#}
+#auth_resp = requests.post(auth_url, headers=auth_headers, data=auth_data)
+#print(auth_resp.status_code)
+#access_token = auth_resp.json()['access_token']
+#print(access_token)
