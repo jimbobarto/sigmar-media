@@ -1,0 +1,22 @@
+def generate_signature(method, url, url_parameters, oauth_parameters,
+                       oauth_consumer_key, oauth_consumer_secret,
+                       oauth_token_secret=None, status=None):
+    """Create the signature base string"""
+
+    #Combine parameters into one hash
+    temp = collect_parameters(oauth_parameters, status, url_parameters)
+
+    #Create string of combined url and oauth parameters
+    parameter_string = stringify_parameters(temp)
+
+    #Create your Signature Base String
+    signature_base_string = (
+        method.upper() + '&' +
+        escape(str(url)) + '&' +
+        escape(parameter_string)
+    )
+
+    #Get the signing key
+    signing_key = create_signing_key(oauth_consumer_secret, oauth_token_secret)
+
+    return calculate_signature(signing_key, signature_base_string)

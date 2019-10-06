@@ -1,57 +1,62 @@
-import base64
+from requests_oauthlib import OAuth1Session
+
 import json
 import requests
-
-def getCredentials():
-    with open('.credentials') as json_file:  
-        credentials = json.load(json_file)
-
-    return credentials
-
-def getEncodedKey(client_key, client_secret):
-    #Reformat the keys and encode them
-    key_secret = '{}:{}'.format(client_key, client_secret).encode('ascii')
-
-    # Transform from bytes to bytes that can be printed
-    b64_encoded_key = base64.b64encode(key_secret)
-
-    #Transform from bytes back into Unicode
-    return b64_encoded_key.decode('ascii')
+import oauth_utilities
+import sys
 
 
-#
-#credentials = getCredentials()
-#b64_encoded_key = getEncodedKey(credentials['client_key'], credentials['client_secret_key'])
+REQUEST_TOKEN_URL = 'https://api.twitter.com/oauth/request_token'
+ACCESS_TOKEN_URL = 'https://api.twitter.com/oauth/access_token'
+AUTHORIZATION_URL = 'https://api.twitter.com/oauth/authorize'
+SIGNIN_URL = 'https://api.twitter.com/oauth/authenticate'
 
-base_url = 'https://api.twitter.com/'
-# https://api.twitter.com/oauth/request_token
-auth_url = '{}oauth/request_token'.format(base_url)
-auth_headers = {
-    'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-    'oauth_callback': 'oob'
-}
+credentials = oauth_utilities.getCredentials()
+
+oauth_client = OAuth1Session(credentials['twitter_consumer_key'], client_secret=credentials['twitter_consumer_secret'], callback_uri='oob')
+
+print('\nRequesting temp token from Twitter...\n')
+
+resp = oauth_client.fetch_request_token(REQUEST_TOKEN_URL)
+
+url = oauth_client.authorization_url(AUTHORIZATION_URL)
+
+print('\nGo to {u}'.format(u=url))
+
+verifier = raw_input('Please enter the verifier code (q to quit):\n')
+if verifier == 'q':
+    sys.exit(1)
+else:
+    oauth_client = OAuth1Session(credentials['twitter_consumer_key'], client_secret=credentials['twitter_consumer_secret'],
+                                 resource_owner_key=resp.get('oauth_token'),
+                                 resource_owner_secret=resp.get('oauth_token_secret'),
+                                 verifier=verifier)
 
 try:
-    auth_resp = requests.post(auth_url, headers=auth_headers)
-    auth_resp.raise_for_status()
-except requests.exceptions.HTTPError as e:  # This is the correct syntax
-    print e
+    resp = oauth_client.fetch_access_token(ACCESS_TOKEN_URL)
+except ValueError as e:
+    raise 'Invalid response from Twitter requesting temp token: {0}'.format(e)
+
+print('''Your tokens/keys are as follows:
+    access_token_key     = {atk}
+    access_token_secret  = {ats}'''.format(
+        atk=resp.get('oauth_token'),
+        ats=resp.get('oauth_token_secret')))
+
+
+'''
+print('1. Get request token')
+print('2. Get auth token')
+choice = raw_input('Please choose your auth operation (q to quit):\n')
+if choice == 'q':
+    print
     sys.exit(1)
+elif choice == '1':
+    get_request_token(base_url)
+elif choice == '2':
+    get_auth_token(base_url)
+else:
+    print('Unknown option')
+    sys.exit(1)
+'''
 
-print(auth_resp.status_code)
-print(auth_resp)
-access_token = auth_resp.json()['oauth_token']
-print(access_token)
-
-#auth_url = '{}oauth2/token'.format(base_url)
-#auth_headers = {
-#    'Authorization': 'Basic {}'.format(b64_encoded_key),
-#    'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
-#}
-#auth_data = {
-#    'grant_type': 'client_credentials'
-#}
-#auth_resp = requests.post(auth_url, headers=auth_headers, data=auth_data)
-#print(auth_resp.status_code)
-#access_token = auth_resp.json()['access_token']
-#print(access_token)
