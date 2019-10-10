@@ -1,4 +1,3 @@
-import ConfigParser
 import urllib
 import random
 import base64
