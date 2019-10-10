@@ -132,8 +132,3 @@ def getCredentials():
 
     return credentials
 
-
-#oauth_token=6253282-eWudHldSbIaelX7swmsiHImEL4KinwaGloHANdrY
-#oauth_token_secret=2EEfA6BG3ly3sR3RjE0IBSnlQu4ZrUzPiYKmrkVU
-#user_id=6253282&screen_name=twitterapi
-
