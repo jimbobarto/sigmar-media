@@ -9,3 +9,6 @@ class TwitterChannel:
 
 		response = t.statuses.update(status=message)
 		print(response)
+
+	def get_channel_name(self):
+		return "twitter"

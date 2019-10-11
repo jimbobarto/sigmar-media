@@ -11,3 +11,6 @@ class DiscordChannel:
 		print(response.status_code)
 		print(response.reason)
 		print(response.text)
+
+	def get_channel_name(self):
+		return "discord"
