@@ -63,7 +63,6 @@ def get_all_config():
 	credentials = {}
 	for media in channel_config:
 		credentials[media] = get_credentials(channel_config[media], {}, "", {})	
-		hierarchy[media] = get_hierarchy(credentials[media])	
 
 	for filename in channel_classes:
 		filename_without_extension = filename.replace('.py', '')
@@ -73,6 +72,7 @@ def get_all_config():
 		for config_channel_name in channel_config:
 			if (config_channel_name == channel_name):
 				channel_driver_found = True
+				hierarchy[config_channel_name] = get_hierarchy(credentials[config_channel_name])
 				class_name = channel_name.capitalize() + 'Channel'
 
 				mod = import_module(f'channels.{filename_without_extension}')
@@ -102,7 +102,7 @@ def get_all_config():
 @app.route('/')
 def init():
 	get_all_config()
-	return render_template('main.html', hierarchy=json.dumps(hierarchy, ensure_ascii=False, indent=3))
+	return render_template('main.html', hierarchy=hierarchy)
 
 @app.route('/favicon.ico') 
 def favicon(): 
