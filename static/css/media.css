@@ -73,3 +73,14 @@ ul {
 .channel-container:hover {
 	background-color: #f0f2f5;
 }
+
+input.message-title {
+	width: 462px;
+	margin: 10px 5px 5px 5px;
+}
+
+input.message-body {
+	width: 462px;
+	height: 100px;
+	margin: 10px 5px 5px 5px;
+}

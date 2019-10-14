@@ -7,6 +7,8 @@ from flask import render_template, request, jsonify, send_from_directory
 from os import listdir
 from os.path import isfile, join
 import json
+import sys
+
 app = Flask(__name__)
 
 channels = {}
@@ -40,20 +42,34 @@ def get_credentials(root, current_credentials, current_name, channel_credentials
 
 	return channel_credentials
 
-def get_hierarchy(credentials):
-	hierarchy = {}
-	top = hierarchy
-	for path in credentials:
-		names = path.split('.')
-		for name in names:
-			if (name not in hierarchy):
-				hierarchy[name] = {}
+def get_config(root, current_name, channel_config):
+	if ('name' in root):
+		current_name = form_name(current_name, root['name'])
+		channel_config['path'] = current_name
 
-			hierarchy = hierarchy[name]
+	if ('config' in root):
+		channel_config['config'] = root['config']
 
-		hierarchy = top
+	if ('channels' in root):
+		for channel in root['channels']:
+			if ('name' in channel):
+				if ('children' not in channel_config):
+					channel_config['children'] = []
+				child = {"name": channel['name'], "channel": True, "path": form_name(current_name, channel['name'])}
+				if ('config' in channel):
+					child['config'] = channel['config']
+				channel_config['children'].append(child)
 
-	return top
+	if ('groups' in root):
+		for group in root['groups']:
+			if ('name' in group):
+				if ('children' not in channel_config):
+					channel_config['children'] = []
+				child = {"name": group['name'], "channel": False, "path": form_name(current_name, group['name'])}
+				child = get_config(group, current_name, child)
+				channel_config['children'].append(child)
+
+	return channel_config
 
 def get_all_config():
 	channel_config = utilities.config.get_config('.channels')
@@ -72,7 +88,7 @@ def get_all_config():
 		for config_channel_name in channel_config:
 			if (config_channel_name == channel_name):
 				channel_driver_found = True
-				hierarchy[config_channel_name] = get_hierarchy(credentials[config_channel_name])
+				hierarchy[config_channel_name] = get_config(channel_config[config_channel_name], config_channel_name, {})
 				class_name = channel_name.capitalize() + 'Channel'
 
 				mod = import_module(f'channels.{filename_without_extension}')
@@ -83,6 +99,8 @@ def get_all_config():
 
 		if (channel_driver_found == False):
 			print(f'No config for {channel_name} but a driver exists')
+
+	print(json.dumps(hierarchy))
 
 	for config_channel_name in channel_config:
 		config_channel_found = False
@@ -108,6 +126,23 @@ def init():
 def favicon(): 
     return send_from_directory(os.path.join(app.root_path, 'static/images'), 'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
+@app.route('/post_message', methods=['POST'])
+def post_message():
+	body = request.get_json(force=True)
+	message = body['message']
+
+	for requested_channel in body['channels']:
+		media = requested_channel.split('.', 1)[0]
+		path = requested_channel.replace(f'{media}.', "")
+
+		if (path in channels[media]['config']):
+			driver = channels[media]['instance']
+			try:
+				driver.send_message(channels[media]['config'][path], message)
+			except:
+				print(f'Attempt to publish message to {media} at {path} failed {sys.exc_info()[0]}')
+
+	return "empty message for now"
 
 
 
