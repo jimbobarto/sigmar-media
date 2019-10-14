@@ -79,7 +79,7 @@ input.message-title {
 	margin: 10px 5px 5px 5px;
 }
 
-input.message-body {
+textarea.message-body {
 	width: 462px;
 	height: 100px;
 	margin: 10px 5px 5px 5px;
