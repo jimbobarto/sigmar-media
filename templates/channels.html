@@ -5,7 +5,12 @@
 				<div class="channel-name-container">
 					{{channel}}
 				</div>
-				<input type="checkbox" in_channel_hierarchy="true" channel="{{hierarchy[channel]['channel']}}" name="{{channel}}" path="{{hierarchy[channel]['path']}}" checked>
+				
+				{% if base_config['channels_checked_by_default'] == true %}
+					<input type="checkbox" in_channel_hierarchy="true" channel="{{hierarchy[channel]['channel']}}" name="{{channel}}" path="{{hierarchy[channel]['path']}}" checked>
+				{% else %}	
+					<input type="checkbox" in_channel_hierarchy="true" channel="{{hierarchy[channel]['channel']}}" name="{{channel}}" path="{{hierarchy[channel]['path']}}">
+				{% endif %} 
 			</div>
 
 			{% for child_channel in hierarchy[channel]['children'] recursive %}
@@ -18,7 +23,11 @@
 								{% endfor %}	
 								{{child_channel['name']}}
 							</div>
-							<input type="checkbox" in_channel_hierarchy="true" channel="{{child_channel['channel']}}" name="{{child_channel['name']}}" path="{{child_channel['path']}}" checked>
+							{% if base_config['channels_checked_by_default'] == true %}
+								<input type="checkbox" in_channel_hierarchy="true" channel="{{child_channel['channel']}}" name="{{child_channel['name']}}" path="{{child_channel['path']}}" checked>
+							{% else %}
+								<input type="checkbox" in_channel_hierarchy="true" channel="{{child_channel['channel']}}" name="{{child_channel['name']}}" path="{{child_channel['path']}}" >
+							{% endif %}
 						</div>
 						{% if child_channel['children'] %}
 							{{ loop(child_channel['children']) }}

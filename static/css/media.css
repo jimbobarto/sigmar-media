@@ -110,3 +110,21 @@ textarea.message-body {
 .header-container {
 	display: table;
 }
+
+.results-container {
+    margin: 10px 5px 5px 5px;
+	height: 300px;
+	overflow-y: scroll;
+	clear: both;
+	width: 984px;
+	box-shadow: 0px 0px 3px 1px #d3d6db inset;
+}
+
+.result-message {
+	overflow-x: hidden;
+	white-space: nowrap;
+}
+
+div.result {
+    margin: 5px;
+}

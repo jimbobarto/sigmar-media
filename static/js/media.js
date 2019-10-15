@@ -8,7 +8,7 @@ $(document).ready(function() {
 });
 
 function submit() {
-	var payload = {'channels': [], 'message': {'title': $("input[id='title']").val(), 'body': $("input[id='body']").val()}};
+	var payload = {'channels': [], 'message': {'title': $("input[id='title']").val(), 'body': $("textarea[id='body']").val()}};
 	$('input[channel="True"]').each( function(index, channelCheckbox) {
 		if ($(channelCheckbox).prop('checked') == true) {
 			payload['channels'].push($(channelCheckbox).attr('path')); 
@@ -16,7 +16,7 @@ function submit() {
 	});
 
 	$.post($SCRIPT_ROOT + '/post_message', JSON.stringify(payload), function(data) {
-      	alert(data);
+      	$('div.results-container').prepend(data);
   	});
 }
 

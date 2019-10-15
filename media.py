@@ -13,6 +13,7 @@ app = Flask(__name__)
 
 channels = {}
 hierarchy = {}
+base_config = {}
 
 def form_name(current_name_path, new_name):
 	if (current_name_path == ""):
@@ -73,6 +74,8 @@ def get_config(root, current_name, channel_config):
 
 def get_all_config():
 	channel_config = utilities.config.get_config('.channels')
+	global base_config
+	base_config = utilities.config.get_config('config/config.json')
 
 	channel_classes = [filename for filename in listdir('channels') if (re.search('_channel', filename) )]
 
@@ -100,8 +103,6 @@ def get_all_config():
 		if (channel_driver_found == False):
 			print(f'No config for {channel_name} but a driver exists')
 
-	print(json.dumps(hierarchy))
-
 	for config_channel_name in channel_config:
 		config_channel_found = False
 		for filename in channel_classes:
@@ -120,7 +121,7 @@ def get_all_config():
 @app.route('/')
 def init():
 	get_all_config()
-	return render_template('main.html', hierarchy=hierarchy)
+	return render_template('main.html', hierarchy = hierarchy, base_config = base_config)
 
 @app.route('/favicon.ico') 
 def favicon(): 
@@ -129,20 +130,33 @@ def favicon():
 @app.route('/post_message', methods=['POST'])
 def post_message():
 	body = request.get_json(force=True)
+
 	message = body['message']
 
-	for requested_channel in body['channels']:
-		media = requested_channel.split('.', 1)[0]
-		path = requested_channel.replace(f'{media}.', "")
+	results = {}
+	if ( ('title' in message) and ('body' in message) ):
+		for requested_channel in body['channels']:
+			media = requested_channel.split('.', 1)[0]
+			path = requested_channel.replace(f'{media}.', "")
 
-		if (path in channels[media]['config']):
-			driver = channels[media]['instance']
-			try:
-				driver.send_message(channels[media]['config'][path], message)
-			except:
-				print(f'Attempt to publish message to {media} at {path} failed {sys.exc_info()[0]}')
+			if (path in channels[media]['config']):
+				driver = channels[media]['instance']
+				try:
+					results[requested_channel] = driver.send_message(channels[media]['config'][path], base_config, message)
+				except KeyError as e:
+					results[requested_channel] = {"status": "failed", "message": f'Attempt to publish message to {media} at {path} failed {e.message}'}
+				except:
+					results[requested_channel] = {"status": "failed", "message": f'Attempt to publish message to {media} at {path} failed {sys.exc_info()[0]}\n{sys.exc_info()[1]}\n{sys.exc_info()[2]}'}
+	else:
+		if ('title' in message):
+			results['general'] = {"status": "failed", "message": "Missing message body"}
+		else:
+			results['general'] = {"status": "failed", "message": "Missing message title"}
 
-	return "empty message for now"
+	return render_template('results.html', results=results)
 
-
+@app.route('/format_results')
+def format_results():
+	results = request.get_json(force=True)
+	return render_template('results.html', results=results)
 

@@ -1,0 +1,8 @@
+{% for result in results %}
+	<div class="result">
+		<span class="result-message">{{result}}: {{results[result]['timestamp']}} - {{results[result]['message']}}</span>
+		{% if results[result]['link'] %}
+			<span class="result-link"> (<a href="{{results[result]['link']}}" target="_blank">link</a>)</span>
+		{% endif %}
+	</div>
+{% endfor %}
