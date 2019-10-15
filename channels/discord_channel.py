@@ -1,16 +1,21 @@
 import requests
 import json
+import channels.channel_utilities as channel_utilities
 
 class DiscordChannel:
-	def send_message(self, credentials, message):
+   def send_message(self, credentials, config, message):
 
-		payload = {"content":message['body'], "username":"Something else", "avatar_url":""}
-		headers = {'Content-type': 'application/json'}
+        if (config['stubbed']):
+            return {"status": "succeeded", "message": "message posted successfully", "timestamp": channel_utilities.get_timestamp()}
+        else:
+            payload = {"content":message['body'], "username":"Something else", "avatar_url":""}
+            headers = {'Content-type': 'application/json'}
 
-		response = requests.post(credentials['webhook'], data=json.dumps(payload), headers=headers)
-		print(response.status_code)
-		print(response.reason)
-		print(response.text)
+            response = requests.post(credentials['webhook'], data=json.dumps(payload), headers=headers)
+            if (response.status_code == 204):
+                return {"status": "succeeded", "message": "message posted successfully", "timestamp": channel_utilities.get_timestamp()}
+            
+            return {"status": "failed", "message": response.reason, "timestamp": channel_utilities.get_timestamp()}
 
-	def get_channel_name(self):
-		return "discord"
+   def get_channel_name(self):
+      return "discord"
