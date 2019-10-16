@@ -52,7 +52,7 @@ Just type:
 flask run
 ```
 
-### Configuring
+## Configuration
 
 The bulk of the config is in .channels at the top level of the project (a json file). An example is provided in the examples/ directory.
 
@@ -90,6 +90,36 @@ Finally, each level of the config (e.g. top level or within a 'group') can have 
 }
 ```
 
+### Credentials
 The 'credentials' maps have special functionality. They are aggregated as you traverse the config, so a channel nested with groups will have credentials built up (conceivably) from the top level, each ancestor group and the channel itself. This allows you to have config that spans a channel along with config specific to the channel.
+```
+"discord": {
+   "credentials": {
+      "credential_item_1": "credential_value_1"
+   },
+   "groups": [
+      {
+         "credentials": {
+            "credential_item_2": "credential_value_2"
+         },
+         "name": "<server name>",
+         "channels": [
+            "name: "general",
+            "credentials": {
+               "credential_item_3": "credential_value_3"
+            }
+         ]
+      }
+   ]
+}
+```
+and this will results in the following set of credentials for the 'name' channel above
+```
+{
+   "credential_item_1": "credential_value_1",
+   "credential_item_2": "credential_value_2",
+   "credential_item_3": "credential_value_3"
+}
+```
 
 'config' maps on the other hand are not aggregated and just apply at the level they are found.
