@@ -57,10 +57,39 @@ flask run
 The bulk of the config is in .channels at the top level of the project (a json file). An example is provided in the examples/ directory.
 
 The top level map has keys as the social media channel names (e.g. twitter). These keys must match to channel names in the channels/ directory (e.g. twitter_channel.py) for a channel to have both driver and config.
+```
+{
+  "discord": {...}
+  "reddit": {...}
+  "twitter": {...}
+}
+```
 
 Each social media channel in config can then have an list of 'groups' (which can be nested arbitrarily). These structures can be used to correspond to concepts within the particular social media channel. The best example is in this tool's implementation of Discord. Each group corresponds to a server.
+```
+"discord": {
+   "groups": [
+      {
+         "name": "<server name>",
+         "channels": [...]
+      }
+   ]
+}
+```
 
-Finally, each level of the config (e.g. top level or within a 'group') can have a list of 'channels'. Each 'channel' represents the actual 'thing' the toll will post to, e.g. subreddit, twitter user's status or discord text channel.
+Finally, each level of the config (e.g. top level or within a 'group') can have a list of 'channels'. Each 'channel' represents the actual 'thing' the tool will post to, e.g. subreddit, twitter user's status or discord text channel.
+```
+{
+  "twitter": {
+     "channels": [
+        {
+           "name": "<twitter user name>"
+        }
+     ]
+  }
+}
+
+
 
 The 'credentials' maps have special functionality. They are aggregated as you traverse the config, so a channel nested with groups will have credentials built up (conceivably) from the top level, each ancestor group and the channel itself. This allows you to have config that spans a channel alongw ith config specific to the channel.
 
