@@ -1,6 +1,6 @@
 # Sigmar Media
 
-A very (very) simple tool for posting updates to multiple social media channels. This tool currently supports Discord, Reddit and Twitter.
+A very (very) simple tool for posting updates to multiple social media channels. It currently supports Discord, Reddit and Twitter.
 
 ## Getting Started
 
@@ -21,7 +21,7 @@ You will need to install the following modules for the base system:
 And then whatever you need for the channels. The base implementation has:
 * praw
 * python-twitter
-* requests (the Discord channel currently makes simple requests to Webhook)
+* requests (the Discord channel currently makes simple requests to a webhook per channel)
 
 
 ### Installing
