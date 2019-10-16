@@ -91,7 +91,7 @@ Finally, each level of the config (e.g. top level or within a 'group') can have 
 ```
 
 ### Credentials
-The 'credentials' maps have special functionality. They are aggregated as you traverse the config, so a channel nested with groups will have credentials built up (conceivably) from the top level, each ancestor group and the channel itself. This allows you to have config that spans a channel along with config specific to the channel.
+The 'credentials' maps have special functionality. They are aggregated as you traverse the config, so a channel nested within groups will have credentials built up (conceivably) from the top level, each ancestor group and the channel itself. This allows you to have config that spans a platform along with config specific to the channel.
 ```
 "discord": {
    "credentials": {
@@ -104,9 +104,11 @@ The 'credentials' maps have special functionality. They are aggregated as you tr
          },
          "name": "<server name>",
          "channels": [
-            "name: "general",
-            "credentials": {
-               "credential_item_3": "credential_value_3"
+            {
+               "name: "general",
+               "credentials": {
+                  "credential_item_3": "credential_value_3"
+               }
             }
          ]
       }
