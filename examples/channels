@@ -1,0 +1,74 @@
+{
+   "twitter": {
+      "display_name": "Twitter",
+      "config": {
+         "url": "<example of some cnfig here>"
+      },
+      "channels": [
+         {
+            "name": "test_media_manager_publish",
+            "credentials": {
+               "consumer_key": "",
+               "consumer_secret": "",
+               "access_token": "",
+               "access_token_secret": "",
+               "base_url": "https://www.twitter.com/<twitter screen_name here>"
+            }
+         }
+      ]
+   },
+   "facebook": {
+      "display_name": "Facebook",
+      "channels": [
+         {
+            "name": "",
+            "credentials": {
+               "facebook_access_token": ""
+            }
+         }
+      ]
+   },
+   "reddit": {
+      "display_name": "Reddit",
+      "credentials": {
+         "client_id": "",
+         "client_secret": "",
+         "password": "",
+         "username": "",
+         "base_url": "https://www.reddit.com"
+      },
+      "channels": [
+         {
+            "name": "reddit_api_test"
+         }
+      ]
+   },
+   "discord": {
+      "display_name": "Discord",
+      "groups": [
+         {
+            "name": "test_media",
+            "credentials": {
+               "guild_config" : "<example of some cnfig here>"
+            },
+            "channels": [
+               {
+                  "name": "general",
+                  "credentials": {
+                     "webhook": ""
+                  },
+                  "config": {
+                     "url": "<example of some cnfig here>"
+                  }                  
+               },
+               {
+                  "name": "test",
+                  "credentials": {
+                     "webhook": ""
+                  }
+               }
+            ]
+         }
+      ]
+   }
+}
