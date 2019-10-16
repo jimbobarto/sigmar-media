@@ -1,5 +1,4 @@
 from importlib import import_module
-import utilities.config
 import os
 import re
 from flask import Flask
@@ -8,6 +7,8 @@ from os import listdir
 from os.path import isfile, join
 import json
 import sys
+
+import utilities.config
 
 app = Flask(__name__)
 
@@ -47,6 +48,9 @@ def get_config(root, current_name, channel_config):
 	if ('name' in root):
 		current_name = form_name(current_name, root['name'])
 		channel_config['path'] = current_name
+
+	if ('display_name' in root):
+		channel_config['display_name'] = root['display_name']
 
 	if ('config' in root):
 		channel_config['config'] = root['config']

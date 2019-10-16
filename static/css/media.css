@@ -65,6 +65,19 @@ ul {
 	width: 400px;
 }
 
+.channel-container {
+	padding: 10px;
+}
+
+.platform-name-container {
+	display: table-row;
+}
+
+.platform-container {
+	border-bottom: 1px solid;
+	border-color: black;
+}
+
 .span-width {
 	clear: both
 }
@@ -72,10 +85,6 @@ ul {
 .indent {
 	float: left;
 	width: 20px;
-}
-
-.channel-container {
-	padding: 10px;
 }
 
 .channel-container:hover {
@@ -127,4 +136,17 @@ textarea.message-body {
 
 div.result {
     margin: 5px;
+}
+
+.platform-name {
+	margin-left: 10px;
+	padding-left: 10px;
+	vertical-align: middle;
+	display: table-cell;
+	width: 350px;
+}
+
+.platform-selector {
+	vertical-align: middle;
+	display: table-cell;
 }
