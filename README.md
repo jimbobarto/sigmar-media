@@ -90,6 +90,6 @@ Finally, each level of the config (e.g. top level or within a 'group') can have 
 }
 ```
 
-The 'credentials' maps have special functionality. They are aggregated as you traverse the config, so a channel nested with groups will have credentials built up (conceivably) from the top level, each ancestor group and the channel itself. This allows you to have config that spans a channel alongw ith config specific to the channel.
+The 'credentials' maps have special functionality. They are aggregated as you traverse the config, so a channel nested with groups will have credentials built up (conceivably) from the top level, each ancestor group and the channel itself. This allows you to have config that spans a channel along with config specific to the channel.
 
 'config' maps on the other hand are not aggregated and just apply at the level they are found.
