@@ -44,79 +44,79 @@ def get_credentials(root, current_credentials, current_name, channel_credentials
 
 	return channel_credentials
 
-def get_config(root, current_name, channel_config):
+def get_config(root, current_name, platform_config):
 	if ('name' in root):
 		current_name = form_name(current_name, root['name'])
-		channel_config['path'] = current_name
+		platform_config['path'] = current_name
 
 	if ('display_name' in root):
-		channel_config['display_name'] = root['display_name']
+		platform_config['display_name'] = root['display_name']
 
 	if ('config' in root):
-		channel_config['config'] = root['config']
+		platform_config['config'] = root['config']
 
 	if ('channels' in root):
 		for channel in root['channels']:
 			if ('name' in channel):
-				if ('children' not in channel_config):
-					channel_config['children'] = []
+				if ('children' not in platform_config):
+					platform_config['children'] = []
 				child = {"name": channel['name'], "channel": True, "path": form_name(current_name, channel['name'])}
 				if ('config' in channel):
 					child['config'] = channel['config']
-				channel_config['children'].append(child)
+				platform_config['children'].append(child)
 
 	if ('groups' in root):
 		for group in root['groups']:
 			if ('name' in group):
-				if ('children' not in channel_config):
-					channel_config['children'] = []
+				if ('children' not in platform_config):
+					platform_config['children'] = []
 				child = {"name": group['name'], "channel": False, "path": form_name(current_name, group['name'])}
 				child = get_config(group, current_name, child)
-				channel_config['children'].append(child)
+				platform_config['children'].append(child)
 
-	return channel_config
+	return platform_config
 
 def get_all_config():
-	channel_config = utilities.config.get_config('.channels')
+	platform_config = utilities.config.get_config('.channels')
 	global base_config
 	base_config = utilities.config.get_config('config/config.json')
 
-	channel_classes = [filename for filename in listdir('channels') if (re.search('_channel', filename) )]
+	platform_classes = [filename for filename in listdir('platforms') if (re.search('_platform', filename) )]
 
 	credentials = {}
-	for media in channel_config:
-		credentials[media] = get_credentials(channel_config[media], {}, "", {})	
+	for media in platform_config:
+		credentials[media] = get_credentials(platform_config[media], {}, "", {})	
 
-	for filename in channel_classes:
+	for filename in platform_classes:
 		filename_without_extension = filename.replace('.py', '')
-		channel_name = filename_without_extension.replace('_channel', '')
+		platform_name = filename_without_extension.replace('_platform', '')
 
-		channel_driver_found = False
-		for config_channel_name in channel_config:
-			if (config_channel_name == channel_name):
+		platform_driver_found = False
+		for config_platform_name in platform_config:
+			if (config_platform_name == platform_name):
 				channel_driver_found = True
-				hierarchy[config_channel_name] = get_config(channel_config[config_channel_name], config_channel_name, {})
-				class_name = channel_name.capitalize() + 'Channel'
+				hierarchy[config_platform_name] = get_config(platform_config[config_platform_name], config_platform_name, {})
+				class_name = platform_name.capitalize() + 'Platform'
 
-				mod = import_module(f'channels.{filename_without_extension}')
+				mod = import_module(f'platforms.{filename_without_extension}')
 				instance = getattr(mod, class_name)
 
-				channels[config_channel_name] = {'instance': instance(), 'config': credentials[config_channel_name], 'hierarchy': hierarchy[config_channel_name]}
+				channels[config_platform_name] = {'instance': instance(), 'config': credentials[config_platform_name], 'hierarchy': hierarchy[config_platform_name]}
 				break
 
 		if (channel_driver_found == False):
-			print(f'No config for {channel_name} but a driver exists')
+			print(f'No config for {platform_name} but a driver exists')
 
-	for config_channel_name in channel_config:
-		config_channel_found = False
-		for filename in channel_classes:
-			channel_name = filename.replace('_channel.py', '')
-			if (config_channel_name == channel_name):
-				config_channel_found = True
+	for config_platform_name in platform_config:
+		config_platform_found = False
+		for filename in platform_classes:
+			platform_name = filename.replace('_channel.py', '')
+			if (config_platform_name == platform_name):
+				config_platform_found = True
 				break
 
-		if (config_channel_found == False):
-			print(f'No driver for {config_channel_name} but config exists')
+		if (config_platform_found == False):
+			print(f'No driver for {config_platform_name} but config exists')
 
 	return channels
 
