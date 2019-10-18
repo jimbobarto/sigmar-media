@@ -1,0 +1,32 @@
+<div id="message">
+	<div>
+		<div id="message-container" class="align-left card message-container">
+			<div id="title-container">
+				<div class="title-margin">
+					Title:
+				</div>
+				<div>
+					<input type="text" class="message-title message-margin" id="title">
+				</div>
+			</div>
+			<div id="body-container">
+				<div class="title-margin">
+					Message:
+				</div>
+				<div>
+					<textarea class="message-body message-margin" rows=4 id="body"></textarea>
+				</div>
+			</div>
+			<div class="align-bottom">
+				<button class="media-button message-margin" onclick="submit();">Post</button>
+			</div>
+		</div>
+	</div>
+	<div class="align-right">
+		{% include 'channels.html' %}
+	</div>
+</div>
+<div id="results">
+	<div class="results-container">
+	</div>
+</div>

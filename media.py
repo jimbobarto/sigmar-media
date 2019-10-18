@@ -164,3 +164,15 @@ def format_results():
 	results = request.get_json(force=True)
 	return render_template('results.html', results=results)
 
+
+#get_content
+@app.route('/get_content', methods=['POST'])
+def get_content():
+	body = request.get_json(force=True)
+
+	if (body['content'] and body['content'] == "post"):
+		get_all_config()
+		return render_template('post.html', hierarchy = hierarchy, base_config = base_config)
+
+	if (body['content'] and body['content'] == "calendar"):
+		return render_template('calendar.html')

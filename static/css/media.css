@@ -3,8 +3,28 @@ html {
 }
 ul {
 	list-style: none;
-    padding-inline-start: 5px;
+	text-align: center;
+	margin-left:350px;
 }
+li {
+	float: left;
+	margin-left: 20px;
+	font-weight: bold;
+}
+
+li.selected {
+	border-bottom: 1px solid;
+	border-color: black;
+}
+
+.menu-container {
+	text-align: center;
+}
+
+.content-container {
+	clear: both;
+}
+
 .align-right {
 	float: left;
 	display: inline-block;
