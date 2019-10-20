@@ -3,11 +3,9 @@
 		<div class="parent">
 			<div class="platform-container channel-container">
 				<div class="platform-name-container channel-name-container">
-					{% if channel_contents['config'] and channel_contents['config']['icon'] %}
-						<span class="platform-icon-container">
-							<img class="" src="{{url_for('static', filename='images/' + channel_contents['config']['icon'])}}"/>
-						</span>
-					{% endif %}
+					<span class="platform-icon-container">
+						<img class="" src="{{url_for('static', filename='images/icons/' + channel_name + '.png')}}"/>
+					</span>
 					<span class="platform-name">
 						{% if channel_contents['display_name'] %}
 							{{channel_contents['display_name']}}
