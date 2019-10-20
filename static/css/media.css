@@ -114,6 +114,8 @@ li.selected {
 
 input.message-title {
 	width: 462px;
+	border-color: grey;
+    border-width: 1px;
 }
 
 textarea.message-body {
