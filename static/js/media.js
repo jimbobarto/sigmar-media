@@ -5,6 +5,21 @@ $(document).ready(function() {
 			$(channelCheckbox).prop('checked', newValue);
 		});
 	});   
+
+	$(function() {
+		$("li[name='menu-item']").on("click",function() {
+			$("li[name='menu-item']").each( function(index, menuItem) {
+				$(menuItem).removeClass('selected');
+			});
+			$(this).addClass('selected');
+
+			payload = {'content': $(this).attr('content')};
+			$.post($SCRIPT_ROOT + '/get_content', JSON.stringify(payload), function(data) {
+		      	$("div[id='content-container']").html(data);
+		  	});
+
+		});
+	});
 });
 
 function submit() {
@@ -19,18 +34,3 @@ function submit() {
       	$('div.results-container').prepend(data);
   	});
 }
-
-$(function() {
-	$("li[name='menu-item']").on("click",function() {
-		$("li[name='menu-item']").each( function(index, menuItem) {
-			$(menuItem).removeClass('selected');
-		});
-		$(this).addClass('selected');
-
-		payload = {'content': $(this).attr('content')};
-		$.post($SCRIPT_ROOT + '/get_content', JSON.stringify(payload), function(data) {
-	      	$("div[id='content-container']").html(data);
-	  	});
-
-	});
-});

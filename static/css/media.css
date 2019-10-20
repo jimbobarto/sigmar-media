@@ -83,7 +83,7 @@ li.selected {
 
 .channel-name-container {
 	display: inline-block;
-	width: 400px;
+	width: 416px;
 }
 
 .channel-container {
@@ -134,7 +134,7 @@ textarea.message-body {
 	font-size: 30px;
 	font-weight: bold;
 	vertical-align: middle;
-	display: table-cell;
+	display: inline-block;
 }
 
 .header-container {
@@ -163,11 +163,16 @@ div.result {
 	margin-left: 10px;
 	padding-left: 10px;
 	vertical-align: middle;
-	display: table-cell;
+	display: inline-block;
 	width: 350px;
 }
 
 .platform-selector {
 	vertical-align: middle;
-	display: table-cell;
+	display: inline-block;
+}
+
+.platform-icon-container {
+	width: 50px;
+	display: inline-block;
 }

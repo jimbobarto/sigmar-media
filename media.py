@@ -15,6 +15,7 @@ app = Flask(__name__)
 channels = {}
 hierarchy = {}
 base_config = {}
+platform_suffix = "_platform"
 
 def form_name(current_name_path, new_name):
 	if (current_name_path == ""):
@@ -81,7 +82,7 @@ def get_all_config():
 	global base_config
 	base_config = utilities.config.get_config('config/config.json')
 
-	platform_classes = [filename for filename in listdir('platforms') if (re.search('_platform', filename) )]
+	platform_classes = [filename for filename in listdir('platforms') if (re.search(platform_suffix, filename) )]
 
 	credentials = {}
 	for media in platform_config:
@@ -89,7 +90,7 @@ def get_all_config():
 
 	for filename in platform_classes:
 		filename_without_extension = filename.replace('.py', '')
-		platform_name = filename_without_extension.replace('_platform', '')
+		platform_name = filename_without_extension.replace(platform_suffix, '')
 
 		platform_driver_found = False
 		for config_platform_name in platform_config:
@@ -110,7 +111,7 @@ def get_all_config():
 	for config_platform_name in platform_config:
 		config_platform_found = False
 		for filename in platform_classes:
-			platform_name = filename.replace('_channel.py', '')
+			platform_name = filename.replace(platform_suffix + '.py', '')
 			if (config_platform_name == platform_name):
 				config_platform_found = True
 				break
