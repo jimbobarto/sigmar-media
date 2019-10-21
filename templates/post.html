@@ -14,11 +14,20 @@
 					Message:
 				</div>
 				<div>
-					<textarea class="message-body message-margin" rows=4 id="body"></textarea>
+					{% if base_config['maximum_characters'] > 0 %}
+						<textarea class="message-body message-margin" rows=4 maxlength="{{base_config['maximum_characters']}}" id="body"></textarea>
+					{% else %}
+						<textarea class="message-body message-margin" rows=4 id="body"></textarea>
+					{% endif %}
 				</div>
 			</div>
 			<div class="align-bottom">
 				<button class="media-button message-margin" onclick="submit();">Post</button>
+				<span class="body-count" id="count-container">
+					{% if base_config['maximum_characters'] > 0 %}
+						0/{{base_config['maximum_characters']}}
+					{% endif %}	
+				</span>
 			</div>
 		</div>
 	</div>

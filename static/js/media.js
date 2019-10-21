@@ -20,6 +20,16 @@ $(document).ready(function() {
 
 		});
 	});
+
+	$(function() {
+		$("#body").keyup( function() {
+			if ($("#maximum_characters").val() > 0) {
+				var entered_characters = $("#body").val().length;
+				$("#count-container").html(entered_characters + '/' + $("#maximum_characters").val());
+			}
+		});
+	});
+
 });
 
 function submit() {

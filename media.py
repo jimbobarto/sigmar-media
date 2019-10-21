@@ -126,7 +126,18 @@ def get_all_config():
 @app.route('/')
 def init():
 	get_all_config()
+	base_config['maximum_characters'] = get_maximum_characters(hierarchy)
+
 	return render_template('main.html', hierarchy = hierarchy, base_config = base_config)
+
+def get_maximum_characters(hierarchy):
+	maximum_characters = 0 
+	for platform in hierarchy:
+		if ('config' in hierarchy[platform] and 'maximum_characters' in hierarchy[platform]['config']):
+			if (hierarchy[platform]['config']['maximum_characters'] > maximum_characters):
+				maximum_characters = hierarchy[platform]['config']['maximum_characters']	
+
+	return maximum_characters
 
 @app.route('/favicon.ico') 
 def favicon(): 
