@@ -50,43 +50,48 @@ class FacebookPlatform:
         return True
 
     def send_message(self, credentials, config, message):
-        driver = webdriver.Chrome(options = self.get_options())
-        driver.get(credentials['url'])
-        title = driver.title
-        if (credentials['name'] not in title):
-            self.enter_string(driver,driver.find_element_by_css_selector("input[name='email']"), credentials['email'])
-            self.enter_string(driver, driver.find_element_by_css_selector("input[name='pass']"), credentials['password'])
+        if (config['stubbed']):
+            return {"status": "succeeded", "message": "message posted successfully", "timestamp": platform_utilities.get_timestamp()}
+        else:
+            platform_utilities.add_to_path(config['cwd'] + config['driver_path'])
 
-            if (self.check_element_exists(driver, "input[value='Log In']")):
-                log_in_button = driver.find_element_by_css_selector("input[value='Log In']")
-                log_in_button.click()
-            elif (self.check_element_exists(driver, "button[name='login']")):
-                log_in_button = driver.find_element_by_css_selector("button[name='login']")
-                log_in_button.click()
+            driver = webdriver.Chrome(options = self.get_options())
+            driver.get(credentials['url'])
+            title = driver.title
+            if (credentials['name'] not in title):
+                self.enter_string(driver,driver.find_element_by_css_selector("input[name='email']"), credentials['email'])
+                self.enter_string(driver, driver.find_element_by_css_selector("input[name='pass']"), credentials['password'])
 
-        if (not self.wait_for_element(driver, "a[aria-label='Options']")):
+                if (self.check_element_exists(driver, "input[value='Log In']")):
+                    log_in_button = driver.find_element_by_css_selector("input[value='Log In']")
+                    log_in_button.click()
+                elif (self.check_element_exists(driver, "button[name='login']")):
+                    log_in_button = driver.find_element_by_css_selector("button[name='login']")
+                    log_in_button.click()
+
+            if (not self.wait_for_element(driver, "a[aria-label='Options']")):
+                driver.close()
+                return {"status": "failed", "message": "Couldn't find the options on the chat popup before continuing", "timestamp": platform_utilities.get_timestamp()}
+
+            post = driver.find_element_by_css_selector("textarea[name='xhpc_message']")
+            post.click()
+
+            if (not self.wait_for_element(driver, "button[label='Show background options']")):
+                driver.close()
+                return {"status": "failed", "message": "Couldn't find the post popup options", "timestamp": platform_utilities.get_timestamp()}
+            if (not self.wait_for_element(driver, "a[data-tooltip-content='Insert an emoji']")):
+                driver.close()
+                return {"status": "failed", "message": "Couldn't find the post emoji options", "timestamp": platform_utilities.get_timestamp()}
+
+            self.enter_string(driver, driver.find_element_by_css_selector("div[data-testid='status-attachment-mentions-input']"), message['body'])
+
+            post_button = driver.find_element_by_css_selector("button[data-testid='react-composer-post-button']")
+            post_button.click()
+
+            self.wait_for_element(driver, "p:contains('" + message['body'] + "')")
+
             driver.close()
-            return {"status": "failed", "message": "Couldn't find the options on the chat popup before continuing", "timestamp": platform_utilities.get_timestamp()}
-
-        post = driver.find_element_by_css_selector("textarea[name='xhpc_message']")
-        post.click()
-
-        if (not self.wait_for_element(driver, "button[label='Show background options']")):
-            driver.close()
-            return {"status": "failed", "message": "Couldn't find the post popup options", "timestamp": platform_utilities.get_timestamp()}
-        if (not self.wait_for_element(driver, "a[data-tooltip-content='Insert an emoji']")):
-            driver.close()
-            return {"status": "failed", "message": "Couldn't find the post emoji options", "timestamp": platform_utilities.get_timestamp()}
-
-        self.enter_string(driver, driver.find_element_by_css_selector("div[data-testid='status-attachment-mentions-input']"), message['body'])
-
-        post_button = driver.find_element_by_css_selector("button[data-testid='react-composer-post-button']")
-        post_button.click()
-
-        self.wait_for_element(driver, "p:contains('" + message['body'] + "')")
-
-        driver.close()
-        return {"status": "succeeded", "message": "Message posted successfully", "timestamp": platform_utilities.get_timestamp()}
+            return {"status": "succeeded", "message": "Message posted successfully", "timestamp": platform_utilities.get_timestamp()}
 
     def get_platform_name(self):
         return "facebook"

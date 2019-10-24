@@ -1,4 +1,5 @@
 {
-   "stubbed": false,
-   "channels_checked_by_default": true
+   "stubbed": true,
+   "channels_checked_by_default": true,
+   "driver_path": "/drivers"
 }
