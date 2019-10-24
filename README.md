@@ -1,6 +1,6 @@
 # Sigmar Media
 
-A very (very) simple tool for posting updates to multiple social media channels. It currently supports Discord, Reddit and Twitter.
+A very (very) simple tool for posting updates to multiple social media channels. It currently supports Discord, Reddit and Twitter. And Facebook, although this is via Selenium and I don't like to talk about that.
 
 ## Getting Started
 
@@ -21,14 +21,16 @@ You will need to install the following modules for the base system:
 And then whatever you need for the channels. The base implementation has:
 * praw
 * python-twitter
-* requests (the Discord channel currently makes simple requests to a webhook per channel)
-
+* requests (the Discord channel currently makes a simple request to each channel via a webhook)
+* selenium (Facebook - just don't ask...)
 
 ### Installing
 
-Once you've cloned the repository and installed the modules listed above, you can run the app as per any flask app
+Clone the repository and install the modules listed above. You will also need the Chrome webdriver placed in the drivers/ subdirectory.
 
-Once you've cloned this repository locally, install virtualenv (if you see 'python2' or 'python3' in any of these instructions, just type 'python'):
+Once you've got that (assuming you want to post to Facebook as well) you can run the app as per any flask app
+
+Install virtualenv (if you see 'python2' or 'python3' in any of these instructions, just type 'python'):
 http://flask.pocoo.org/docs/1.0/installation/#install-install-virtualenv
 
 Now (as per http://flask.pocoo.org/docs/1.0/installation/#python-version):
@@ -56,7 +58,7 @@ flask run
 
 The bulk of the config is in .channels at the top level of the project (a json file). An example is provided in the examples/ directory.
 
-The top level map has keys as the social media channel names (e.g. twitter). These keys must match to channel names in the channels/ directory (e.g. twitter_channel.py) for a channel to have both driver and config.
+The top level map has keys as the social media platform names (e.g. twitter). These keys must match to plaatform names in the platforms/ directory (e.g. twitter_platform.py) for a platform to have both driver and config.
 ```
 {
   "discord": {...}
