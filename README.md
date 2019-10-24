@@ -58,7 +58,7 @@ flask run
 
 The bulk of the config is in .channels at the top level of the project (a json file). An example is provided in the examples/ directory.
 
-The top level map has keys as the social media platform names (e.g. twitter). These keys must match to plaatform names in the platforms/ directory (e.g. twitter_platform.py) for a platform to have both driver and config.
+The top level map has keys as the social media platform names (e.g. twitter). These keys must match to platform names in the platforms/ directory (e.g. twitter_platform.py) for a platform to have both driver and config.
 ```
 {
   "discord": {...}
@@ -117,7 +117,7 @@ The 'credentials' maps have special functionality. They are aggregated as you tr
    ]
 }
 ```
-and this will results in the following set of credentials for the 'name' channel above
+the above credentials hierarchy results in the following set of credentials below
 ```
 {
    "credential_item_1": "credential_value_1",
