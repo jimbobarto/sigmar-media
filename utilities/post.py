@@ -13,9 +13,9 @@ def post_message(message, channels, base_config):
 			if (path in channels[media]['credentials']):
 				driver = channels[media]['instance']
 				try:
-					results[requested_channel] = driver.send_message(channels[media]['credentials'][path], base_config, message)
+					results[requested_channel] = driver.send_message(channels[media]['credentials'][path], base_config, message['message'])
 				except KeyError as e:
-					results[requested_channel] = {"status": "failed", "message": f'Attempt to publish message to {media} at {path} failed {e.message}'}
+					results[requested_channel] = {"status": "failed", "message": f'Attempt to publish message to {media} at {path} failed {str(e)}'}
 				except:
 					results[requested_channel] = {"status": "failed", "message": f'Attempt to publish message to {media} at {path} failed {sys.exc_info()[0]}\n{sys.exc_info()[1]}\n{sys.exc_info()[2]}'}
 	else:

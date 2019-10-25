@@ -47,6 +47,8 @@ def favicon():
 def post_message():
 	body = request.get_json(force=True)
 
+	print(f'body: {body}')
+	print(f'channels: {channels}')
 	results = utilities.post.post_message(body, channels, base_config)
 	return render_template('results.html', results=results)
 
