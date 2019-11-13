@@ -9,13 +9,7 @@ These instructions will get you a copy of the project up and running on your loc
 ### Prerequisites
 
 You will need to install the following modules for the base system:
-* importlib
-* os
-* re
 * flask
-* json
-* sys
-* time
 * datetime
 
 And then whatever you need for the channels. The base implementation has:
@@ -23,6 +17,14 @@ And then whatever you need for the channels. The base implementation has:
 * python-twitter
 * requests (the Discord channel currently makes a simple request to each channel via a webhook)
 * selenium (Facebook - just don't ask...)
+
+If you have pip installed, this can be achieved with
+
+```
+pip install -r requirements.txt
+```
+
+in the top-level project directory.
 
 ### Installing
 

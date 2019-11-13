@@ -1,0 +1,6 @@
+flask
+datetime
+praw
+python-twitter
+requests
+selenium
