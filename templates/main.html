@@ -4,8 +4,14 @@
 		<meta name="google" content="notranslate">
 		<meta http-equiv="Content-Language" content="en">
 		
-		<link rel="stylesheet" href="{{url_for('static', filename='css/jquery-ui.css')}}">
-		<link rel="stylesheet" href="{{url_for('static', filename='css/media.css')}}">
+		<link rel="stylesheet" href="{{url_for('static', filename='css/jquery-ui.css')}}" />
+		<link rel="stylesheet" href="{{url_for('static', filename='css/media.css')}}" />
+		<link rel="stylesheet" href="{{url_for('static', filename='css/fullcalendar/core/main.css')}}" />
+		<link rel="stylesheet" href="{{url_for('static', filename='css/fullcalendar/daygrid/main.css')}}" />
+
+		<script src="{{url_for('static', filename='js/fullcalendar/core/main.js')}}"></script>
+		<script src="{{url_for('static', filename='js/fullcalendar/daygrid/main.js')}}"></script>
+		<script src="{{url_for('static', filename='js/fullcalendar/interaction/main.js')}}"></script>
 
 		<script src="{{url_for('static', filename='js/jquery.js')}}"></script>
 		<script src="{{url_for('static', filename='js/jquery-ui.js')}}"></script>
@@ -13,6 +19,19 @@
 		<script src="{{url_for('static', filename='js/media.js')}}"></script>
 		<script>
 			$SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+		</script>
+		<script>
+			document.addEventListener('DOMContentLoaded', function() {
+				var calendarElement = document.getElementById('calendar');
+
+				if (calendarElement !== null) {
+					var calendar = new FullCalendar.Calendar(calendarElement, {
+						plugins: [ 'dayGrid' ]
+					});
+
+					calendar.render();
+				}
+			});
 		</script>
 	</head>
 	<body>

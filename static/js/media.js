@@ -30,6 +30,24 @@ $(document).ready(function() {
 		});
 	});
 
+	$(function() {
+		$("[name='menu-item'][content='calendar']").on("click", function() {
+			$(document).on("ready", "div[id='calendar']", function(){
+				var calendarElement = document.getElementById('calendar');
+				alert("ELement: " + calendarElement);
+
+				if (calendarElement !== null) {
+					alert("calendar is not null");
+					var calendar = new FullCalendar.Calendar(calendarElement, {
+						plugins: [ 'dayGrid' ]
+					});
+
+					calendar.render();
+				}
+			});
+		});
+	});
+
 });
 
 function submit() {

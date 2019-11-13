@@ -1,3 +1,22 @@
+<script>
+	$(function() {
+		var calendarElement = document.getElementById('calendar');
+
+		if (calendarElement !== null) {
+			var calendar = new FullCalendar.Calendar(calendarElement, {
+				plugins: [ 'dayGrid', 'interaction' ],
+
+				dateClick: function(info) {
+					alert('Date: ' + info.dateStr);
+					alert('Resource ID: ' + info.resource.id);
+				}
+			});
+
+
+			calendar.render();
+		}
+	});
+</script>
+
 <div id="calendar">
-	Whoops, nothing to see here yet!
 </div>

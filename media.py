@@ -23,10 +23,11 @@ def get_all_config():
 	global hierarchy
 	hierarchy = utilities.config.get_channel_hierarchy()
 
+	base_config['maximum_characters'] = get_maximum_characters(hierarchy)
+
 @app.route('/')
 def init():
 	get_all_config()
-	base_config['maximum_characters'] = get_maximum_characters(hierarchy)
 
 	return render_template('main.html', hierarchy = hierarchy, base_config = base_config)
 
