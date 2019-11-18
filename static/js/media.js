@@ -22,9 +22,7 @@ $(document).ready(function() {
 	});
 
 	$(function() {
-		$("td.fc-day").on("click",function() {
-			//renderCalendar()
-		});
+		$( "#scheduled_date" ).datetimepicker();
 	});
 
 	$(function() {
@@ -57,15 +55,42 @@ function renderCalendar() {
 	}
 };
 
-function submit() {
-	var payload = {'channels': [], 'message': {'title': $("input[id='title']").val(), 'body': $("textarea[id='body']").val()}};
-	$('input[channel="True"]').each( function(index, channelCheckbox) {
+function getPayload(title, body, channelElementSelector) {
+	var payload = {'channels': [], 'message': {'title': title, 'body': body}};
+	$(channelElementSelector).each( function(index, channelCheckbox) {
 		if ($(channelCheckbox).prop('checked') == true) {
 			payload['channels'].push($(channelCheckbox).attr('path')); 
 		}
 	});
 
-	$.post($SCRIPT_ROOT + '/post_message', JSON.stringify(payload), function(data) {
-      	$('div.results-container').prepend(data);
-  	});
+	return payload;
+}
+
+function submit(title, body, channelElementSelector, submitDateTime, postImmediately) {
+	if (postImmediately && submitDateTime.length > 0) {
+		alert("You're trying to post immediately but you've specified a date/time");
+		return;
+	}
+
+	if (!postImmediately && submitDateTime.length == 0) {
+		alert("You're trying to schedule a post but you haven't specified a date/time");
+		return;
+	}
+
+
+	var payload = getPayload(title, body, channelElementSelector);
+	if (submitDateTime.length > 0) {
+		payload['dateTime'] = submitDateTime;
+	}
+
+	if (postImmediately) {
+		$.post($SCRIPT_ROOT + '/post_message', JSON.stringify(payload), function(data) {
+	      	$('div.results-container').prepend(data);
+	  	});
+	}
+	else {
+		$.post($SCRIPT_ROOT + '/schedule_message', JSON.stringify(payload), function(data) {
+	      	$('div.results-container').prepend(data);
+	  	});
+	}
 }

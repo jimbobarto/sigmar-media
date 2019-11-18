@@ -49,7 +49,14 @@ def post_message():
 	body = request.get_json(force=True)
 
 	print(f'body: {body}')
-	print(f'channels: {channels}')
+	results = utilities.post.post_message(body, channels, base_config)
+	return render_template('results.html', results=results)
+
+@app.route('/schedule_message', methods=['POST'])
+def schedule_message():
+	body = request.get_json(force=True)
+
+	print(f'body: {body}')
 	results = utilities.post.post_message(body, channels, base_config)
 	return render_template('results.html', results=results)
 
