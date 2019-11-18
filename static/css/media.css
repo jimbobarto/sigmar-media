@@ -18,6 +18,10 @@ li.selected {
 	border-color: black;
 }
 
+body {
+	height: 100%;
+}
+
 .menu-container {
 	text-align: center;
 }

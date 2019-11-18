@@ -22,6 +22,12 @@ $(document).ready(function() {
 	});
 
 	$(function() {
+		$("td.fc-day").on("click",function() {
+			//renderCalendar()
+		});
+	});
+
+	$(function() {
 		$("#body").keyup( function() {
 			if ($("#maximum_characters").val() > 0) {
 				var entered_characters = $("#body").val().length;
@@ -30,25 +36,26 @@ $(document).ready(function() {
 		});
 	});
 
-	$(function() {
-		$("[name='menu-item'][content='calendar']").on("click", function() {
-			$(document).on("ready", "div[id='calendar']", function(){
-				var calendarElement = document.getElementById('calendar');
-				alert("ELement: " + calendarElement);
-
-				if (calendarElement !== null) {
-					alert("calendar is not null");
-					var calendar = new FullCalendar.Calendar(calendarElement, {
-						plugins: [ 'dayGrid' ]
-					});
-
-					calendar.render();
-				}
-			});
-		});
-	});
 
 });
+
+function renderCalendar() {
+	var calendarElement = document.getElementById('calendar');
+
+	if (calendarElement !== null) {
+		var calendar = new FullCalendar.Calendar(calendarElement, {
+			plugins: [ 'dayGrid', 'interaction' ],
+
+			dateClick: function(info) {
+				$( "#date_display" ).html(info.dateStr);
+				$( "#calendar_dialog" ).dialog({position: {my: "center", at: "center", of: window}});
+			}
+		});
+
+
+		calendar.render();
+	}
+};
 
 function submit() {
 	var payload = {'channels': [], 'message': {'title': $("input[id='title']").val(), 'body': $("textarea[id='body']").val()}};

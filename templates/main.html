@@ -20,21 +20,12 @@
 		<script>
 			$SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
 		</script>
-		<script>
-			document.addEventListener('DOMContentLoaded', function() {
-				var calendarElement = document.getElementById('calendar');
-
-				if (calendarElement !== null) {
-					var calendar = new FullCalendar.Calendar(calendarElement, {
-						plugins: [ 'dayGrid' ]
-					});
-
-					calendar.render();
-				}
-			});
-		</script>
 	</head>
 	<body>
+		<div id="calendar_dialog" title="Scheduler" class="hidden">
+			<p id="date_display"></p>
+			<p>This is the spam dialog which is useful for displaying information. The dialog window can be moved, resized and closed with the 'x' icon.</p>
+		</div>
 		<div>
 			<div id="header">
 				{% include 'header.html' %}
@@ -54,5 +45,6 @@
 				{% include 'post.html' %}
 			</div>
 		</div>
+
 	</body>
 </html>
