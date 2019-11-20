@@ -22,7 +22,7 @@ $(document).ready(function() {
 	});
 
 	$(function() {
-		$( "#scheduled_date" ).datetimepicker();
+		$( "#scheduled_date" ).datetimepicker({hour: 17});
 	});
 
 	$(function() {
