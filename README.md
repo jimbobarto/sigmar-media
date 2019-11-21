@@ -30,6 +30,8 @@ in the top-level project directory.
 
 Clone the repository and install the modules listed above. You will also need the Chrome webdriver placed in the drivers/ subdirectory.
 
+On mac you may wish to grant terminal 'Full Disk Access' in order to prevent pop-ups, but this obviously has security implications.
+
 Once you've got that (assuming you want to post to Facebook as well) you can run the app as per any flask app
 
 Install virtualenv (if you see 'python2' or 'python3' in any of these instructions, just type 'python'):

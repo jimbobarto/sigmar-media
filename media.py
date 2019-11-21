@@ -5,6 +5,7 @@ import json
 
 import utilities.config
 import utilities.post
+import utilities.cron
 
 app = Flask(__name__)
 
@@ -46,18 +47,18 @@ def favicon():
 
 @app.route('/post_message', methods=['POST'])
 def post_message():
-	body = request.get_json(force=True)
+	message_details = request.get_json(force=True)
 
-	print(f'body: {body}')
-	results = utilities.post.post_message(body, channels, base_config)
+	print(f'message_details: {message_details}')
+	results = utilities.post.post_message(message_details, channels, base_config)
 	return render_template('results.html', results=results)
 
 @app.route('/schedule_message', methods=['POST'])
 def schedule_message():
-	body = request.get_json(force=True)
+	message_details = request.get_json(force=True)
 
-	print(f'body: {body}')
-	results = utilities.post.post_message(body, channels, base_config)
+	print(f'message_details: {message_details}')
+	results = utilities.cron.schedule_message(message_details, channels, base_config)
 	return render_template('results.html', results=results)
 
 @app.route('/format_results')
