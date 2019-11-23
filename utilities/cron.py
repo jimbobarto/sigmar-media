@@ -4,6 +4,8 @@ import json
 from datetime import datetime
 from crontab import CronTab
 
+import utilities.config
+
 #print(sys.executable)
 #print( os.path.dirname(sys.executable) )
 
@@ -22,7 +24,17 @@ def schedule_message(message, channels, base_config):
     add_command_to_cron(date_time, create_cron_command(main_directory, path_addition, filename))
 
 def create_cron_command(main_directory, path_addition, filename):
-    return f'{main_directory}/wrapper1.sh "{path_addition}" "{main_directory}" "{filename}"'
+    wrapper_script = get_wrapper_script_name()
+    return f'{main_directory}/{wrapper_script} "{path_addition}" "{main_directory}" "{filename}"'
+
+def get_wrapper_script_name():
+    platform = sys.platform
+    base_config = utilities.config.get_base_config()
+
+    if (base_config['scheduling_wrappers'][platform]):
+        return base_config['scheduling_wrappers'][platform]['location']
+    else:
+        print(f"no wrapper script found for {platform}")
 
 def add_command_to_cron(date_time, command):
     cron_string = get_cron_timestamp(date_time)
@@ -41,7 +53,7 @@ def create_message_file(message, main_directory, filename):
     if ('error' in message_details):
         return message_details
 
-    file = open(main_directory + '/scheduled_posts/' + filename, "w")
+    file = open(main_directory + '/scheduling/posts/' + filename, "w")
     file.write(json.dumps(message_details))
     file.close()
 

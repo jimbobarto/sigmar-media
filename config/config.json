@@ -1,5 +1,11 @@
 {
    "stubbed": false,
-   "channels_checked_by_default": true,
-   "driver_path": "/drivers"
+   "channels_checked_by_default": false,
+   "driver_path": "/drivers",
+   "scheduling_wrappers": {
+   		"darwin": {
+   			"name": "macOS",
+   			"location": "scheduling/wrappers/mac_os.sh"
+   		}
+   }
 }
