@@ -72,6 +72,16 @@ function getPayload(title, body, channelElementSelector) {
 	return payload;
 }
 
+function channelSelected() {
+	var channelsSelected = false
+	$('input[in_channel_hierarchy="true"]').each( function() {
+		if ($(this).prop('checked')) {
+			channelsSelected = true;
+		}
+	});   
+	return channelsSelected;
+}
+
 function submit(title, body, channelElementSelector, submitDateTime, postImmediately) {
 	if (postImmediately && submitDateTime.length > 0) {
 		alert("You're trying to post immediately but you've specified a date/time");
@@ -83,6 +93,11 @@ function submit(title, body, channelElementSelector, submitDateTime, postImmedia
 		return;
 	}
 
+	var channelsSelected = channelSelected()
+	if (!channelsSelected) {
+		alert("No channels selected");
+		return;
+	}
 
 	var payload = getPayload(title, body, channelElementSelector);
 	if (submitDateTime.length > 0) {
