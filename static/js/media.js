@@ -16,13 +16,14 @@ $(document).ready(function() {
 			payload = {'content': $(this).attr('content')};
 			$.post($SCRIPT_ROOT + '/get_content', JSON.stringify(payload), function(data) {
 		      	$("div[id='content-container']").html(data);
+				initialiseDatePicker();
 		  	});
 
 		});
 	});
 
 	$(function() {
-		$( "#scheduled_date" ).datetimepicker({hour: 17, dateFormat: 'dd/mm/yy'});
+		initialiseDatePicker();
 	});
 
 	$(function() {
@@ -37,12 +38,17 @@ $(document).ready(function() {
 
 });
 
+function initialiseDatePicker() {
+	$( "#scheduled_date" ).datetimepicker({hour: 17, dateFormat: 'dd/mm/yy'});
+}
+
 function renderCalendar() {
 	var calendarElement = document.getElementById('calendar');
 
 	if (calendarElement !== null) {
 		var calendar = new FullCalendar.Calendar(calendarElement, {
 			plugins: [ 'dayGrid', 'interaction' ],
+			events: '/get_events',
 
 			dateClick: function(info) {
 				$( "#date_display" ).html(info.dateStr);
