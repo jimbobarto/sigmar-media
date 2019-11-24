@@ -39,7 +39,6 @@ def get_wrapper_script_name():
 def add_command_to_cron(date_time, command):
     cron_string = get_cron_timestamp(date_time)
 
-    print(f"Cron string: {cron_string}")
     cron = CronTab(user=True)
     job  = cron.new(command=command)
     job.setall(cron_string)
@@ -61,7 +60,7 @@ def create_message_file(message, main_directory, filename):
 
 def get_cron_filename(date_time):
 
-    filename = f"{date_time.year}_{date_time.month}_{date_time.day}_{date_time.hour}_{date_time.minute}.json"
+    filename = f"{date_time.minute}_{date_time.hour}_{date_time.day}_{date_time.month}.json"
     return filename
 
 def get_cron_timestamp(date_time):
@@ -75,6 +74,7 @@ def create_message_json(message):
     if ( ('title' in message['message']) and ('body' in message['message']) and ('channels' in message) ):
         message_details['message'] = {'title': message['message']['title'], 'body': message['message']['body']}
         message_details['channels'] = message['channels']
+        message_details['dateTime'] = message['dateTime']
 
     else:
         error_messages = []

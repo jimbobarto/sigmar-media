@@ -2,10 +2,12 @@ import os
 from flask import Flask
 from flask import render_template, request, jsonify, send_from_directory
 import json
+from datetime import datetime
 
 import utilities.config
 import utilities.post
 import utilities.cron
+import utilities.events
 
 app = Flask(__name__)
 
@@ -66,7 +68,6 @@ def format_results():
 	results = request.get_json(force=True)
 	return render_template('results.html', results=results)
 
-#get_content
 @app.route('/get_content', methods=['POST'])
 def get_content():
 	body = request.get_json(force=True)
@@ -77,3 +78,14 @@ def get_content():
 
 	if (body['content'] and body['content'] == "calendar"):
 		return render_template('calendar.html')
+
+@app.route('/get_events')
+def get_events():
+    start_date_time = datetime.strptime(request.args.get('start'), "%Y-%m-%dT%H:%M:%S%z")
+    end_date_time = datetime.strptime(request.args.get('end'), "%Y-%m-%dT%H:%M:%S%z")
+
+    events = utilities.events.get_events(start_date_time, end_date_time)
+
+    return app.response_class(json.dumps(events), content_type='application/json')
+
+
