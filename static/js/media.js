@@ -58,6 +58,13 @@ function renderCalendar() {
 			dateClick: function(info) {
 				$( "#date_display" ).html(info.dateStr);
 				$( "#calendar_dialog" ).dialog({position: {my: "center", at: "center", of: window}});
+			},
+			eventClick: function(info) {
+				console.log(info.event.extendedProps);
+				$.get($SCRIPT_ROOT + '/get_event', info.event.extendedProps, function(data) {
+	      			alert(JSON.stringify(data));
+	  			});
+
 			}
 		});
 

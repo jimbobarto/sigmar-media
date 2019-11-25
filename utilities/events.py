@@ -12,9 +12,7 @@ import utilities.config
 logging.basicConfig(filename='media.log', level=logging.DEBUG, format='%(asctime)s %(levelname)s: %(message)s')
 
 def get_events(start, end):
-	cwd = os.getcwd()
-
-	path = cwd + '/scheduling/posts'
+	path = get_path()
 	scheduled_files = get_scheduled_files(path)
 
 	cron = CronTab(user=True)
@@ -33,15 +31,20 @@ def get_events(start, end):
 			date_time = datetime.strptime(post_details['dateTime'], '%d/%m/%Y %H:%M').replace(tzinfo=utc)
 
 			if (date_time > start and date_time < end):
-				events.append(build_event(post_details, date_time, date_time))
+				events.append(build_event(file, post_details, date_time, date_time))
 		except:
 			print(f'{sys.exc_info()[0]}\n{sys.exc_info()[1]}\n{sys.exc_info()[2]}')
 
 	return events
 
-def build_event(post_file_contents, start, end):
+def get_path():
+	cwd = os.getcwd()
+
+	return cwd + '/scheduling/posts'
+
+def build_event(post_file_name, post_file_contents, start, end):
 	date_time_format = '%Y-%m-%dT%H:%M:%S'
-	return {"title": post_file_contents['message']['title'], "start": start.strftime(date_time_format), "end": end.strftime(date_time_format)}
+	return {"title": post_file_contents['message']['title'], "start": start.strftime(date_time_format), "end": end.strftime(date_time_format), "file": post_file_name}
 
 def get_scheduled_files(path):
 	all_files = [f for f in listdir(path) if isfile(join(path, f))]
@@ -86,4 +89,8 @@ def compare_cron_to_files(cron, scheduled_files):
 		if (not file_has_matching_cron):
 			logging.error(f"File '{file}' does not have a matching cron entry")
 
-	return valid_files	
+	return valid_files
+
+def get_event_data(filename):
+	path = get_path()
+	return utilities.config.get_config(f"{path}/{filename}")

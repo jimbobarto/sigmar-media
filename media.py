@@ -88,4 +88,9 @@ def get_events():
 
     return app.response_class(json.dumps(events), content_type='application/json')
 
+@app.route('/get_event')
+def get_event():
+	file_data = request.args.get('file')
+	event_data = utilities.events.get_event_data(file_data)
 
+	return app.response_class(json.dumps(event_data), content_type='application/json')
