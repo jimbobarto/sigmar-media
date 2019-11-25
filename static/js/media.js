@@ -49,7 +49,12 @@ function renderCalendar() {
 		var calendar = new FullCalendar.Calendar(calendarElement, {
 			plugins: [ 'dayGrid', 'interaction' ],
 			events: '/get_events',
-
+			height: 700,
+			eventTimeFormat: { // like '14:30:00'
+				hour: '2-digit',
+				minute: '2-digit',
+				hour12: false
+			},
 			dateClick: function(info) {
 				$( "#date_display" ).html(info.dateStr);
 				$( "#calendar_dialog" ).dialog({position: {my: "center", at: "center", of: window}});
