@@ -1,11 +1,4 @@
-$(document).ready(function() {
-	$('input[in_channel_hierarchy="true"]').change(function() {
-		var newValue = $(this).prop('checked');
-		$(this).closest('div.parent').find('input[in_channel_hierarchy="true"]').each( function(index, channelCheckbox) {
-			$(channelCheckbox).prop('checked', newValue);
-		});
-	});   
-
+$(document).ready(function() {	
 	$(function() {
 		$("li[name='menu-item']").on("click",function() {
 			$("li[name='menu-item']").each( function(index, menuItem) {
@@ -22,24 +15,28 @@ $(document).ready(function() {
 		});
 	});
 
-	$(function() {
-		initialiseDatePicker();
-	});
-
-	$(function() {
-		$("#body").keyup( function() {
-			if ($("#maximum_characters").val() > 0) {
-				var entered_characters = $("#body").val().length;
-				$("#count-container").html(entered_characters + '/' + $("#maximum_characters").val());
-			}
-		});
-	});
-
-
 });
 
 function initialiseDatePicker() {
 	$( "#scheduled_date" ).datetimepicker({hour: 17, dateFormat: 'dd/mm/yy'});
+}
+
+function setMaximumCharacters() {
+	$("#body").keyup( function() {
+		if ($("#maximum_characters").val() > 0) {
+			var entered_characters = $("#body").val().length;
+			$("#count-container").html(entered_characters + '/' + $("#maximum_characters").val());
+		}
+	});	
+}
+
+function addCascadingSelection() {
+	$('input[in_channel_hierarchy="true"]').change(function() {
+		var newValue = $(this).prop('checked');
+		$(this).closest('div.parent').find('input[in_channel_hierarchy="true"]').each( function(index, channelCheckbox) {
+			$(channelCheckbox).prop('checked', newValue);
+		});
+	});   
 }
 
 function renderCalendar() {
@@ -60,9 +57,11 @@ function renderCalendar() {
 				$( "#calendar_dialog" ).dialog({position: {my: "center", at: "center", of: window}});
 			},
 			eventClick: function(info) {
-				console.log(info.event.extendedProps);
+				//console.log(info.event.extendedProps);
 				$.get($SCRIPT_ROOT + '/get_event', info.event.extendedProps, function(data) {
-	      			alert(JSON.stringify(data));
+					populateEventDialog(data.message.title, data.message.body, data.channels);
+	      			//alert(JSON.stringify(data));
+	      			$( "#event_dialog" ).dialog();
 	  			});
 
 			}
@@ -72,6 +71,12 @@ function renderCalendar() {
 		calendar.render();
 	}
 };
+
+function populateEventDialog(title, message, channels) {
+	$('#event_title').html(title);
+	$('#event_message').html(message);
+	$('#event_channels').html(channels);
+}
 
 function getPayload(title, body, channelElementSelector) {
 	var payload = {'channels': [], 'message': {'title': title, 'body': body}};
