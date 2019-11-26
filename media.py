@@ -51,7 +51,6 @@ def favicon():
 def post_message():
 	message_details = request.get_json(force=True)
 
-	print(f'message_details: {message_details}')
 	results = utilities.post.post_message(message_details, channels, base_config)
 	return render_template('results.html', results=results)
 
@@ -59,7 +58,6 @@ def post_message():
 def schedule_message():
 	message_details = request.get_json(force=True)
 
-	print(f'message_details: {message_details}')
 	results = utilities.cron.schedule_message(message_details, channels, base_config)
 	return render_template('results.html', results=results)
 
@@ -88,9 +86,16 @@ def get_events():
 
     return app.response_class(json.dumps(events), content_type='application/json')
 
-@app.route('/get_event')
+@app.route('/event')
 def get_event():
-	file_data = request.args.get('file')
-	event_data = utilities.events.get_event_data(file_data)
+	filename = request.args.get('file')
+	event_data = utilities.events.get_event_data(filename)
 
 	return app.response_class(json.dumps(event_data), content_type='application/json')
+
+@app.route('/event', methods=['DELETE'])
+def delete_event():
+	filename = request.args.get('file')
+	results = utilities.events.delete_event(filename)
+
+	return json.dumps({'success':True}), 200, {'ContentType':'application/json'} 

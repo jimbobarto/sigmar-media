@@ -57,25 +57,48 @@ function renderCalendar() {
 				$( "#calendar_dialog" ).dialog({position: {my: "center", at: "center", of: window}});
 			},
 			eventClick: function(info) {
-				//console.log(info.event.extendedProps);
-				$.get($SCRIPT_ROOT + '/get_event', info.event.extendedProps, function(data) {
-					populateEventDialog(data.message.title, data.message.body, data.channels);
-	      			//alert(JSON.stringify(data));
-	      			$( "#event_dialog" ).dialog();
-	  			});
-
+				eventClick(info);
 			}
 		});
-
 
 		calendar.render();
 	}
 };
 
-function populateEventDialog(title, message, channels) {
+function eventClick(info) {
+	$.get($SCRIPT_ROOT + '/event', info.event.extendedProps, function(data) {
+		populateEventDialog(data.message.title, data.message.body, data.dateTime, data.channels);
+		$( "#event_dialog" ).dialog({
+			buttons: [
+				{
+					text: "Delete",
+					click: function() {
+						var this_dialog = $(this);
+						$.ajax({
+						    url: $SCRIPT_ROOT + '/event?file=' + info.event.extendedProps.file,
+						    type: 'DELETE',
+						    success: function(result) {
+						        this_dialog.dialog( "close" );
+						        info.event.remove();
+						    }
+						});
+					}
+				}
+			]
+		});
+	});
+}
+
+function populateEventDialog(title, message, timestamp, channels) {
+	var channelHtml = "";
+	$.each( channels, function( index, element ){
+		channelHtml += element + "<br/>";
+	});
+
 	$('#event_title').html(title);
 	$('#event_message').html(message);
-	$('#event_channels').html(channels);
+	$('#event_timestamp').html(timestamp);
+	$('#event_channels').html(channelHtml);
 }
 
 function getPayload(title, body, channelElementSelector) {

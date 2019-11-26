@@ -10,16 +10,17 @@
 		<link rel="stylesheet" href="{{url_for('static', filename='css/fullcalendar/daygrid/main.css')}}" />
 		<link rel="stylesheet" href="{{url_for('static', filename='css/timepicker/jquery-ui-timepicker-addon.css')}}" />
 
+		<script src="{{url_for('static', filename='js/jquery.js')}}"></script>
+		<script src="{{url_for('static', filename='js/jquery-ui.js')}}"></script>
+		<script src="{{url_for('static', filename='js/jquery.ui.touch-punch.min.js')}}"></script>
+		
+		<script src="{{url_for('static', filename='js/timepicker/jquery-ui-timepicker-addon.js')}}"></script>
+
 		<script src="{{url_for('static', filename='js/fullcalendar/core/main.js')}}"></script>
 		<script src="{{url_for('static', filename='js/fullcalendar/daygrid/main.js')}}"></script>
 		<script src="{{url_for('static', filename='js/fullcalendar/interaction/main.js')}}"></script>
 
-		<script src="{{url_for('static', filename='js/jquery.js')}}"></script>
-		<script src="{{url_for('static', filename='js/jquery-ui.js')}}"></script>
-		<script src="{{url_for('static', filename='js/jquery.ui.touch-punch.min.js')}}"></script>
 		<script src="{{url_for('static', filename='js/media.js')}}"></script>
-		
-		<script src="{{url_for('static', filename='js/timepicker/jquery-ui-timepicker-addon.js')}}"></script>
 
 		<script>
 			$SCRIPT_ROOT = {{ request.script_root|tojson|safe }};

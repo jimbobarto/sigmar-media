@@ -13,15 +13,23 @@ import utilities.config
 #print( os.path.dirname(os.path.realpath(__file__)) )
 
 def schedule_message(message, channels, base_config):
-    print(message)
-    path_addition = os.path.dirname(sys.executable)
-    main_directory = os.path.dirname(os.path.realpath(__file__)) + "/.."
+    results = {}
+    try:
+        path_addition = os.path.dirname(sys.executable)
+        main_directory = os.path.dirname(os.path.realpath(__file__)) + "/.."
 
-    date_time = get_date_time(message['dateTime'])
-    filename = get_cron_filename(date_time)
-    create_message_file(message, main_directory, filename)
+        date_time = get_date_time(message['dateTime'])
+        filename = get_cron_filename(date_time)
+        create_message_file(message, main_directory, filename)
 
-    add_command_to_cron(date_time, create_cron_command(main_directory, path_addition, filename))
+        add_command_to_cron(date_time, create_cron_command(main_directory, path_addition, filename))
+
+        results['SCHEDULER'] = {"status": "succeeded", "message": f"Scheduled message for {message['channels']} at {message['dateTime']}", "timestamp": message['dateTime']}
+    except:
+        results['SCHEDULER'] = {"status": "failed", "message": f"Attempt to schedule message for {message['channels']} failed {sys.exc_info()[0]}\n{sys.exc_info()[1]}\n{sys.exc_info()[2]}"}
+
+    return results
+
 
 def create_cron_command(main_directory, path_addition, filename):
     wrapper_script = get_wrapper_script_name()

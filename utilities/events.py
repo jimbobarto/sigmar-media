@@ -94,3 +94,21 @@ def compare_cron_to_files(cron, scheduled_files):
 def get_event_data(filename):
 	path = get_path()
 	return utilities.config.get_config(f"{path}/{filename}")
+
+def delete_cron(filename):
+	try:
+		cron = CronTab(user=True)
+		iter = cron.find_command(filename)
+		for job in iter:
+			cron.remove( job )
+		cron.write()
+	except:
+		print(f'{sys.exc_info()[0]}\n{sys.exc_info()[1]}\n{sys.exc_info()[2]}')
+
+def delete_message_file(filename):
+	os.remove(f"{get_path()}/{filename}")
+
+def delete_event(filename):
+	delete_cron(filename)
+	delete_message_file(filename)
+
